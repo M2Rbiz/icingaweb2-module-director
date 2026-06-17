@@ -358,6 +358,7 @@ class IcingaServiceForm extends DirectorObjectForm
         $forceCommandElements = $this->hasPermission('director/admin');
 
         $this->addNameElement()
+             ->addDisplayNameElement()
              ->addHostObjectElement()
              ->addImportsElement()
              ->addChoices('service')
@@ -504,6 +505,7 @@ class IcingaServiceForm extends DirectorObjectForm
         }
 
         $this->addNameElement()
+             ->addDisplayNameElement()
              ->addChoices('service')
              ->addDisabledElement()
              ->addGroupsElement()
@@ -546,6 +548,7 @@ class IcingaServiceForm extends DirectorObjectForm
         }
 
         $this->addNameElement()
+             ->addDisplayNameElement()
              ->addDisabledElement()
              ->addGroupsElement()
              ->groupMainProperties();
@@ -582,6 +585,28 @@ class IcingaServiceForm extends DirectorObjectForm
         if ($this->object()->isApplyRule()) {
             $this->eventuallyAddNameRestriction('director/service/apply/filter-by-name');
         }
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     * @throws \Zend_Form_Exception
+     */
+    protected function addDisplayNameElement()
+    {
+        if ($this->isTemplate()) {
+            return $this;
+        }
+
+        $this->addElement('text', 'display_name', array(
+            'label'       => $this->translate('Display name'),
+            'spellcheck'  => 'false',
+            'description' => $this->translate(
+                'Alternative name for this service. Might be a more user friendly'
+                . ' string helping your users to identify this service'
+            )
+        ));
 
         return $this;
     }
